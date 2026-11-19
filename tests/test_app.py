@@ -40,3 +40,18 @@ def test_list_tickets_sorted_by_priority(client):
     priorities = [ticket["priority"] for ticket in data]
 
     assert priorities == ["High", "High", "Medium", "Medium", "Low"]
+
+def test_create_ticket_empty_title_returns_400(client):
+    payload = {
+        "title": "",
+        "description": "Testing empty ticket title",
+        "category": "Hardware",
+        "priority": "High"
+    }
+
+    response = client.post("/api/tickets", json=payload)
+
+    assert response.status_code == 400
+
+    data = response.get_json()
+    assert data["error"] == "Title is required"
