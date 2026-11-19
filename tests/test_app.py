@@ -55,3 +55,12 @@ def test_create_ticket_empty_title_returns_400(client):
 
     data = response.get_json()
     assert data["error"] == "Title is required"
+
+def test_home_page_displays_resolved_badge(client):
+    response = client.get("/")
+
+    assert response.status_code == 200
+
+    html = response.get_data(as_text=True)
+
+    assert '<span class="badge">Resolved</span>' in html
